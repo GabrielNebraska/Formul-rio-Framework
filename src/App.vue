@@ -48,7 +48,8 @@ const states = [
 
 <template>
   
-
+<div class="container">
+  <main>
 
 <div>
   <label for="nameFild" class="form-label">Name</label> <br> 
@@ -92,9 +93,23 @@ const states = [
   </div>
 
   <div>
+
+    <label>Your Preferred Linguage</label> <br> 
+    <input type="text" v-model="preferredLinguages" size="25" minlength="2" maxlength="30"> 
+
+  </div>
+  <div>
     <label>Bibliography</label> <br>
   <textarea type="text" v-model="user.bibliography" cols="50" rows="6"> </textarea> 
 </div>
+
+
+
+
+</main>
+
+</div>
+
 </template>
 
 <style scoped>
