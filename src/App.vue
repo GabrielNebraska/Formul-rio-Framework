@@ -4,10 +4,11 @@ import { ref } from 'vue';
 
 const user = ref({
 
+file: '',
 name: '',
 email: '',
 password: '',
-confirmpassord: '',
+confirmpassword: '',
 city: '',
 state: '',
 preferredLinguages: '',
@@ -44,6 +45,17 @@ const states = [
   { uf: 'SE', name: 'Sergipe' },
   { uf: 'TO', name: 'Tocantins' }
 ]
+
+function handleFileUpload(e) {
+  const target = e.target
+  console.log(target)
+  if (target && target.files) {
+    const file = target.files[0]
+    user.value.avatar = URL.createObjectURL(file)
+  }
+}
+
+
 </script>
 
 <template>
@@ -51,36 +63,78 @@ const states = [
 <div class="container">
   <main>
 
-<div>
-  <label for="nameFild" class="form-label">Name</label> <br> 
-  <input type="Name" v-model="user.name" size="25" minlength="10" maxlength="40">
-</div>
-<div>
-  <label>Email</label> <br>
-  <input type="Email" v-model="user.email" size="25" minlength="10" maxlength="40">
-</div> 
-<div>
-  <label>Password</label> <br>
-  <input type="password" v-model="user.password" size="25" minlength="6" maxlength="20">
-</div> 
-<div>
-  <label>Confirm Passord</label> <br>
-  <input type="ConfirmPassord" v-model="confirmpassord" size="25" minlength="6" maxlength="20">
+
+    <selection name="form" mode="out-in">
+
+      <div class="mt-5 mb-3">
+        <p v-for="(value, key) of user" :key="key">{{ key }}: {{ value }}</p>
+        <img v-if="user.avatar" class="avatar" :src="user.avatar" />
+
+      </div>
+    </selection>
+
+<div class="input-group mb-3">
+  <label for="inputGroupFile01" class="input-group-text">Avatar</label> 
+  <input class="form-control" type="file" id="inputGroupFile01" @change="handleFileUpload($event)">
 </div>
 
+<div class="form-floating mb-3">
+  <input type="name" v-model="user.name" class="form-control" id="floatingInput" placeholder="name" minlength="6" maxlength="45">
+  <label for="floatingInput">Name</label>
+</div>
 
-  <select v-model="sexo"> 
+<div class="form-floating mb-3">
+  <input type="email" v-model="user.email" class="form-control" id="floatingInput" placeholder="name@example.com" minlength="6" maxlength="40">
+  <label for="floatingInput">Email address</label>
+</div>
+
+<div class="form-floating mb-3">
+  <input type="password" v-model="user.password" class="form-control" id="floatingInput" placeholder="password" minlength="6" maxlength="20">
+  <label for="floatingInput">Password</label>
+</div>
+
+<div class="form-floating mb-3">
+  <input type="confirmpassword" v-model="user.confirmpassword" class="form-control" id="floatingInput" placeholder="Confirm password" minlength="6" maxlength="20">
+  <label for="floatingInput">Confirm password</label>
+</div>
+  
+  <div class="form-floating mb-3"> 
+  <input type="text" v-model="user.city" class="form-control" id="floatingInput" placeholder="Your city" minlength="10" maxlength="40">
+  <label for="floatingInput">City</label>  
+</div>
+
+<div class="form-floating mb-3">
+    
+    <textarea type="text" v-model="user.bibliography" class="form-control" id="floatingInput" placeholder="Bibliography" cols="50" rows="6"> </textarea> 
+    <label for="floatingInput">Bibliography</label> 
+  </div>
+  
+
+<div>
+<label>Your preferred Linguage</label> <br>
+    <select v-model="user.preferredLinguages" class="form-select" size="3" aria-label="abluble">
+      <option>C#</option>
+      <option>JavaScript</option>
+      <option>Java</option>
+      <option>PHP</option>
+      <option>Python</option>
+      <option>Swift</option>
+      <option>Go</option>
+    </select>
+  </div>
+
+  <br>
+
+  <div>
+  <label>Sex</label> <br> 
+  <select v-model="user.sexo"> 
   <option value="Masc">Masculine</option>
   <option value="Fem">Feminine</option>
   <option value="Other">Other</option>
   </select>
-
-  
-  <div>
-  <label>City</label> <br>
-  <input type="City" v-model="user.city" size="25" minlength="10" maxlength="40">
   </div>
 
+  <br>
 
   <div>
   <label>State</label> <br>
@@ -92,16 +146,6 @@ const states = [
   </select>
   </div>
 
-  <div>
-
-    <label>Your Preferred Linguage</label> <br> 
-    <input type="text" v-model="preferredLinguages" size="25" minlength="2" maxlength="30"> 
-
-  </div>
-  <div>
-    <label>Bibliography</label> <br>
-  <textarea type="text" v-model="user.bibliography" cols="50" rows="6"> </textarea> 
-</div>
 
 
 
