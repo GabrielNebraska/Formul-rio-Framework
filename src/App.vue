@@ -11,9 +11,9 @@ password: '',
 confirmpassword: '',
 city: '',
 state: '',
-preferredLinguages: '',
-bibliography: ''
-
+preferredLinguages: [],
+bibliography: '',
+sexo: ''
 })
  
 const states = [
@@ -55,6 +55,7 @@ function handleFileUpload(e) {
   }
 }
 
+const mostrarPerfil = ref(false)
 
 </script>
 
@@ -63,14 +64,27 @@ function handleFileUpload(e) {
 <div class="container">
   <main>
 
+    <selection v-if="mostrarPerfil" name="form" mode="out-in">
 
-    <selection name="form" mode="out-in">
+      <div class="card" style="width: 18rem;"  >      
+        <img v-if="user.avatar" class="card-img-top" :src="user.avatar" />
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{user.name}}</h5>
+        </div>
+        <div>
+        <ul list-group list-group-flush>
+          <li class="group-list-item">{{user.email}}</li>
+          <li class="group-list-item">{{user.city}}</li>
+          <li class="group-list-item">{{user.state}}</li>
+          <li class="group-list-item">{{user.preferredLinguages}}</li>
+          <li class="group-list-item">{{user.bibliography}}</li>
+          <li class="group-list-item">{{user.sexo}}</li>
+        </ul>
+        <button class="btn btn-info" @click="mostrarPerfil = false">Esconder</button>
+        </div>
 
-      <div class="mt-5 mb-3">
-        <p v-for="(value, key) of user" :key="key">{{ key }}: {{ value }}</p>
-        <img v-if="user.avatar" class="avatar" :src="user.avatar" />
-
-      </div>
+      
     </selection>
 
 <div class="input-group mb-3">
@@ -79,40 +93,40 @@ function handleFileUpload(e) {
 </div>
 
 <div class="form-floating mb-3">
-  <input type="name" v-model="user.name" class="form-control" id="floatingInput" placeholder="name" minlength="6" maxlength="45">
+  <input type="name" v-model="user.name" class="form-control" id="floatingInput" placeholder="name" minlength="6" maxlength="45" required>
   <label for="floatingInput">Name</label>
 </div>
 
-<div class="form-floating mb-3">
-  <input type="email" v-model="user.email" class="form-control" id="floatingInput" placeholder="name@example.com" minlength="6" maxlength="40">
+<div class="form-floating mb-3">        
+  <input type="email" v-model="user.email" class="form-control" id="floatingInput" placeholder="name@example.com" minlength="6" maxlength="40" required>
   <label for="floatingInput">Email address</label>
 </div>
 
 <div class="form-floating mb-3">
-  <input type="password" v-model="user.password" class="form-control" id="floatingInput" placeholder="password" minlength="6" maxlength="20">
+  <input type="password" v-model="user.password" class="form-control" id="floatingInput" placeholder="password" minlength="6" maxlength="20" required>
   <label for="floatingInput">Password</label>
 </div>
 
 <div class="form-floating mb-3">
-  <input type="confirmpassword" v-model="user.confirmpassword" class="form-control" id="floatingInput" placeholder="Confirm password" minlength="6" maxlength="20">
+  <input type="password" v-model="user.confirmpassword" class="form-control" id="floatingInput" placeholder="Confirm password" minlength="6" maxlength="20" required>
   <label for="floatingInput">Confirm password</label>
 </div>
   
   <div class="form-floating mb-3"> 
-  <input type="text" v-model="user.city" class="form-control" id="floatingInput" placeholder="Your city" minlength="10" maxlength="40">
+  <input type="text" v-model="user.city" class="form-control" id="floatingInput" placeholder="Your city" minlength="10" maxlength="40" required>
   <label for="floatingInput">City</label>  
 </div>
 
 <div class="form-floating mb-3">
     
-    <textarea type="text" v-model="user.bibliography" class="form-control" id="floatingInput" placeholder="Bibliography" cols="50" rows="6"> </textarea> 
+    <textarea type="text" v-model="user.bibliography" class="form-control" id="floatingInput" placeholder="Bibliography" cols="50" rows="6" required> </textarea> 
     <label for="floatingInput">Bibliography</label> 
   </div>
   
 
 <div>
-<label>Your preferred Linguage</label> <br>
-    <select v-model="user.preferredLinguages" class="form-select" size="3" aria-label="abluble">
+<label>Your preferred Linguage</label> 
+    <select v-model="user.preferredLinguages" class="form-select" size="3" aria-label="aaaaaaa" required>
       <option>C#</option>
       <option>JavaScript</option>
       <option>Java</option>
@@ -137,8 +151,8 @@ function handleFileUpload(e) {
   <br>
 
   <div>
-  <label>State</label> <br>
-  <select v-model="state">
+  <label for="stateField" class="form-label">State</label> <br>
+  <select class="form-select" v-model="user.state" id="statefield">
   <option selected disabled value="">Selecionar...</option>
   <option v-for="state of states" :key="state.uf" :value="state.uf">
   {{ state.name }}
@@ -146,9 +160,7 @@ function handleFileUpload(e) {
   </select>
   </div>
 
-
-
-
+  <button class="btn btn-primary" type="submit" @click="mostrarPerfil = true">Enviar</button>
 
 </main>
 
