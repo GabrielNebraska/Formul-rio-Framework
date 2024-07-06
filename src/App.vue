@@ -1,3 +1,5 @@
+
+
 <script setup>
 
 import { ref } from 'vue';
@@ -54,6 +56,7 @@ function handleFileUpload(e) {
     user.value.avatar = URL.createObjectURL(file)
   }
 }
+ 
 
 const mostrarPerfil = ref(false)
 
@@ -62,30 +65,8 @@ const mostrarPerfil = ref(false)
 <template>
   
 <div class="container">
-  <main>
 
-    <selection v-if="mostrarPerfil" name="form" mode="out-in">
-
-      <div class="card" style="width: 18rem;"  >      
-        <img v-if="user.avatar" class="card-img-top" :src="user.avatar" />
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">{{user.name}}</h5>
-        </div>
-        <div>
-        <ul list-group list-group-flush>
-          <li class="group-list-item">{{user.email}}</li>
-          <li class="group-list-item">{{user.city}}</li>
-          <li class="group-list-item">{{user.state}}</li>
-          <li class="group-list-item">{{user.preferredLinguages}}</li>
-          <li class="group-list-item">{{user.bibliography}}</li>
-          <li class="group-list-item">{{user.sexo}}</li>
-        </ul>
-        <button class="btn btn-info" @click="mostrarPerfil = false">Esconder</button>
-        </div>
-
-      
-    </selection>
+  <main class="container">
 
 <div class="input-group mb-3">
   <label for="inputGroupFile01" class="input-group-text">Avatar</label> 
@@ -93,7 +74,7 @@ const mostrarPerfil = ref(false)
 </div>
 
 <div class="form-floating mb-3">
-  <input type="name" v-model="user.name" class="form-control" id="floatingInput" placeholder="name" minlength="6" maxlength="45" required>
+  <input type="name" v-model="user.name" class="form-control" id="floatingInput" placeholder="name" minlength="3" maxlength="45" required>
   <label for="floatingInput">Name</label>
 </div>
 
@@ -113,7 +94,7 @@ const mostrarPerfil = ref(false)
 </div>
   
   <div class="form-floating mb-3"> 
-  <input type="text" v-model="user.city" class="form-control" id="floatingInput" placeholder="Your city" minlength="10" maxlength="40" required>
+  <input type="text" v-model="user.city" class="form-control" id="floatingInput" placeholder="Your city" minlength="2" maxlength="40" required>
   <label for="floatingInput">City</label>  
 </div>
 
@@ -137,21 +118,19 @@ const mostrarPerfil = ref(false)
     </select>
   </div>
 
-  <br>
 
   <div>
-  <label>Sex</label> <br> 
-  <select v-model="user.sexo"> 
+  <label>Sex</label> 
+  <select class="form-select" v-model="user.sexo"> 
   <option value="Masc">Masculine</option>
   <option value="Fem">Feminine</option>
   <option value="Other">Other</option>
   </select>
   </div>
-
-  <br>
+  
 
   <div>
-  <label for="stateField" class="form-label">State</label> <br>
+  <label for="stateField" class="form-label">State</label> 
   <select class="form-select" v-model="user.state" id="statefield">
   <option selected disabled value="">Selecionar...</option>
   <option v-for="state of states" :key="state.uf" :value="state.uf">
@@ -160,14 +139,65 @@ const mostrarPerfil = ref(false)
   </select>
   </div>
 
+  
+
   <button class="btn btn-primary" type="submit" @click="mostrarPerfil = true">Enviar</button>
 
 </main>
+
+
+<selection v-if="mostrarPerfil && (user.password === user.confirmpassword)" name="form" mode="out-in">
+
+  <div class="corpo">
+<div class="card" style="width: 18rem;"  >      
+  <img v-if="user.avatar" class="card-img-top" :src="user.avatar" />
+  </div>
+  <div>
+    <h5 class="title">{{user.name}}</h5>
+  <ul list-group list-group-flush>
+    <li class="group-list-item">{{user.email}}</li>
+    <li class="group-list-item">{{user.city}}</li>
+    <li class="group-list-item">{{user.state}}</li>
+    <li class="group-list-item">{{user.preferredLinguages}}</li>
+    <li class="group-list-item">{{user.bibliography}}</li>
+    <li class="group-list-item">{{user.sexo}}</li>
+  </ul>
+  </div>
+</div>
+
+
+
+<button class="btn btn-info" @click="mostrarPerfil = false">Esconder</button>
+  
+</selection>
+
+
 
 </div>
 
 </template>
 
 <style scoped>
+.title{
+  align-items: center;
+}
+.corpo{
+
+  filter: drop-shadow(2px 2px 6px rgb(0, 0, 0));
+  width: 18rem;
+  background-color:silver;
+  border-radius: 3.5%;
+}
+
+.container{
+
+  display:block;
+  max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+background-color: antiquewhite;
+
+}
+
 </style>
 
