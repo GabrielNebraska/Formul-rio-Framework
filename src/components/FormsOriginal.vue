@@ -1,14 +1,20 @@
-
-
 <script setup>
-
-import { ref } from 'vue';
-
+import { reactive, ref } from 'vue'
 const emit = defineEmits(['resultado'])
-
-const usuario = ({...emit.resultado})
- 
-const states = [
+const usuario = reactive({
+  nome: '',
+  email: '',
+  senha: '',
+  confirmarsenha: '',
+  datadenascimento: '',
+  endereco: '',
+  cidade: '',
+  estado: '',
+  hobby: [],
+  linguagens: '',
+  biografia: ''
+})
+const estados = [
   { uf: 'AC', name: 'Acre' },
   { uf: 'AL', name: 'Alagoas' },
   { uf: 'AP', name: 'Amapá' },
@@ -37,134 +43,210 @@ const states = [
   { uf: 'SE', name: 'Sergipe' },
   { uf: 'TO', name: 'Tocantins' }
 ]
+const mostrarResultado = ref(false)
+function validar() {
+  let erro = false
+  if (usuario.senha !== usuario.confirmarsenha) {
+    alert('Senhas não batem')
+    erro = true
+  }
+  if (!erro) {
+    mostrarResultado.value = !mostrarResultado.value
+    emit('resultado', { ...usuario })
+  }
+}
+
 
 function handleFileUpload(e) {
   const target = e.target
   console.log(target)
   if (target && target.files) {
     const file = target.files[0]
-    user.value.avatar = URL.createObjectURL(file)
+    usuario.value.avatar = URL.createObjectURL(file)
   }
 }
- 
-
-const mostrarPerfil = ref(false)
-
 </script>
 
 <template>
-  
-<div class="container">
+  <div class="container">
+    <div class="formulario">
+      <h1>Formulario</h1>
+      <form @submit.prevent="validar">
+        <div class="row">
+          <label for="">Avatar</label>
+          <input type="file" @change="handleFileUpload($event)">
+        </div>
+        <div class="row">
+          <label for="">Nome:</label>
+          <input type="text" v-model="usuario.nome" required />
+        </div>
+        <div class="row">
+          <label for="">Email:</label>
+          <input type="email" v-model="usuario.email" />
+        </div>
+        <div class="row">
+          <label for="">Senha:</label>
+          <input type="password" v-model="usuario.senha" />
+        </div>
+        <div class="row">
+          <label for="">Confirmar Senha:</label>
+          <input type="password" v-model="usuario.confirmarsenha" />
+        </div>
+        <div class="row">
+          <label for="">Data de Nascimento:</label>
+          <input type="date" v-model="usuario.datadenascimento" required />
+        </div>
+        <div class="row">
+          <label for="">Endereço:</label>
+          <input type="text" v-model="usuario.endereco" required />
+        </div>
+        <div>
+          <label>Sexo</label>
+          <select class="form-select" v-model="usuario.sexo">
+            <option value="Masc">Masculine</option>
+            <option value="Fem">Feminine</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
 
-  <main class="container">
+        <div class="row">
+          <label for="">Cidade:</label>
+          <input type="text" v-model="usuario.cidade" required />
+        </div>
+        <div class="row">
+          <label for="">Estado:</label>
+          <select v-model="usuario.estado" required>
+            <option selected disabled value="">Selecionar...</option>
+            <option v-for="estado of estados" :key="estado.uf" :value="estado.uf">
+              {{ estado.name }}
+            </option>
+          </select>
+        </div>
+        <div class="row">
+          <p>Linguagem:</p>
+          <div class="language-options">
+            <input type="radio" id="java" value="java" v-model="usuario.linguagens" />
+            <label for="java">Java</label>
 
-<div class="input-group mb-3">
-  <label for="inputGroupFile01" class="input-group-text">Avatar</label> 
-  <input class="form-control" type="file" id="inputGroupFile01" @change="handleFileUpload($event)">
-</div>
+            <input type="radio" id="js" value="js" v-model="usuario.linguagens" />
+            <label for="js">JavaScript</label>
 
-<div class="form-floating mb-3">
-  <input type="name" v-model="usuario.name" class="form-control" id="floatingInput" placeholder="name" minlength="3" maxlength="45" required>
-  <label for="floatingInput">Name</label>
-</div>
+            <input type="radio" id="c" value="c" v-model="usuario.linguagens" />
+            <label for="c">C</label>
 
-<div class="form-floating mb-3">        
-  <input type="email" v-model="usuario.email" class="form-control" id="floatingInput" placeholder="name@example.com" minlength="6" maxlength="40" required>
-  <label for="floatingInput">Email address</label>
-</div>
-
-<div class="form-floating mb-3">
-  <input type="password" v-model="usuario.password" class="form-control" id="floatingInput" placeholder="password" minlength="6" maxlength="20" required>
-  <label for="floatingInput">Password</label>
-</div>
-
-<div class="form-floating mb-3">
-  <input type="password" v-model="usuario.confirmpassword" class="form-control" id="floatingInput" placeholder="Confirm password" minlength="6" maxlength="20" required>
-  <label for="floatingInput">Confirm password</label>
-</div>
-  
-  <div class="form-floating mb-3"> 
-  <input type="text" v-model="usuario.city" class="form-control" id="floatingInput" placeholder="Your city" minlength="2" maxlength="40" required>
-  <label for="floatingInput">City</label>  
-</div>
-
-<div class="form-floating mb-3">
-    
-    <textarea type="text" v-model="usuario.bibliography" class="form-control" id="floatingInput" placeholder="Bibliography" cols="50" rows="6" required> </textarea> 
-    <label for="floatingInput">Bibliography</label> 
+            <input type="radio" id="python" value="python" v-model="usuario.linguagens" />
+            <label for="python">Python</label>
+          </div>
+        </div>
+        <div clas="row">
+          <label for=""> Hobbies </label>
+          <input type="checkbox" id="jogos" value="jogos" v-model="usuario.hobby" />
+          <label for="jogos">Jogos</label>
+          <input type="checkbox" id="artes" value="artes" v-model="usuario.hobby" />
+          <label for="artes">Artes</label>
+          <input type="checkbox" id="musica" value="musica" v-model="usuario.hobby" />
+          <label for="musica">Música</label>
+        </div>
+        <div class="row">
+          <label for=""> Biografia: </label>
+          <textarea v-model="usuario.biografia"></textarea>
+        </div>
+        <button type="submit">Mostrar</button>
+      </form>
+    </div>
   </div>
-  
-
-<div>
-<label>Your preferred Linguage</label> 
-    <select v-model="usuario.preferredLinguages" class="form-select" size="3" aria-label="aaaaaaa" required>
-      <option>C#</option>
-      <option>JavaScript</option>
-      <option>Java</option>
-      <option>PHP</option>
-      <option>Python</option>
-      <option>Swift</option>
-      <option>Go</option>
-    </select>
-  </div>
-
-
-  <div>
-  <label>Sex</label> 
-  <select class="form-select" v-model="usuario.sexo"> 
-  <option value="Masc">Masculine</option>
-  <option value="Fem">Feminine</option>
-  <option value="Other">Other</option>
-  </select>
-  </div>
-  
-
-  <div>
-  <label for="stateField" class="form-label">State</label> 
-  <select class="form-select" v-model="usuario.state" id="statefield">
-  <option selected disabled value="">Selecionar...</option>
-  <option v-for="state of states" :key="state.uf" :value="state.uf">
-  {{ state.name }}
-  </option>
-  </select>
-  </div>
-
-
-  <button class="btn btn-primary" type="submit" @click="mostrarPerfil = true">Enviar</button>
-
-
-  <button class="btn btn-info" @click="mostrarPerfil = false">Esconder</button>
-</main>
-
-
-
-
-
-</div>
-
 </template>
 
-<style scoped>
-.title{
-  align-items: center;
-}
-.corpo{
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-  filter: drop-shadow(2px 2px 6px rgb(0, 0, 0));
-  width: 18rem;
-  background-color:silver;
-  border-radius: 3.5%;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
-.container{
+.language-options {
+  display: flex;
+  flex-wrap: wrap;
+}
 
-  display:block;
+.language-options input[type='radio'] {
+  margin-right: 10px;
+}
+
+.language-options label {
+  margin-right: 20px;
+}
+
+.container {
   max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-background-color: antiquewhite;
-
+  margin: 0 auto;
+  padding: 20px;
 }
 
-</style>
+.formulario {
+  background-color: #0c752b;
+  padding: 20px;
+  margin-bottom: 20px;
+}
 
+.formulario h1 {
+  text-align: center;
+  color: #850e0e;
+}
+
+.formulario form .row {
+  margin-bottom: 15px;
+}
+
+.formulario form .row label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.formulario form .row input[type='text'],
+.formulario form .row input[type='email'],
+.formulario form .row input[type='password'],
+.formulario form .row input[type='date'],
+.formulario form .row select,
+.formulario form .row textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #146826;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.formulario form .row textarea {
+  height: 100px;
+}
+
+.formulario form button {
+  background-color: #0c832a;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.formulario form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.resultado {
+  background-color: #a7ffae;
+  padding: 20px;
+}
+
+.resultado h1 {
+  text-align: center;
+  color: #a5190f;
+}
+
+.resultado p {
+  margin-bottom: 10px;
+}
+</style>

@@ -1,34 +1,30 @@
 <script setup>
-
-import { reactive } from 'vue';
-import FormsOriginal  from './components/FormsOriginal.vue'
+import { reactive } from 'vue'
 import FormsResultado from './components/FormsResultado.vue'
+import FormsOriginal from './components/FormsOriginal.vue'
 
 const usuario = reactive({
-file: '',
-name: '',
-email: '',
-password: '',
-confirmpassword: '',
-city: '',
-state: '',
-preferredLinguages: [],
-bibliography: '',
-sexo: ''
+  nome: '',
+  email: '',
+  senha: '',
+  confirmarsenha: '',
+  datadenascimento: '',
+  endereco: '',
+  cidade: '',
+  estado: '',
+  hobby: [],
+  linguagens: '',
+  biografia: ''
 })
 
-const objetoTeste = reactive({})
-
-
 function salvar(novoResultado) {
-  objetoTeste.value = novoResultado
+  Object.assign(usuario, novoResultado)
 }
-
 </script>
 
 <template>
-
-<FormsOriginal @resultado="salvar" />
-<FormsResultado :usuario="objetoTeste" />
-
+  <FormsOriginal @resultado="salvar" />
+  <FormsResultado :usuario="usuario" />
 </template>
+
+<style scoped></style>
